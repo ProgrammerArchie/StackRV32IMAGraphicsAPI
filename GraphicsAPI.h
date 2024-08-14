@@ -8,6 +8,7 @@ unsigned video_memory[31];
 void write_to_column(unsigned char column_number, unsigned column_data) {
 	unsigned char* columnaddress = (unsigned char*) COLUMNBYTE;
 	if(column_number > 32) column_number = 32;
+	if(column_number == 0) column_number = 1;
 	*columnaddress = column_number;
 	unsigned char* screenbyte = (unsigned char*) UPPERSCREENBYTE;
 	*screenbyte = column_data >> 24;
@@ -20,11 +21,14 @@ void write_to_column(unsigned char column_number, unsigned column_data) {
 	return;
 }
 void update_screen(void) {
-	for (unsigned char i = 0; i < 31; ++i) write_to_column(i, video_memory[i]);
+	for (unsigned char i = 1; i < 32; ++i) write_to_column(i, video_memory[i - 1]);
 	return;
 }
-void draw_pixel(unsigned char x, unsigned char y) {
-    video_memory[x] |= 1 << (y ^ 31);
+void draw_pixel(unsigned char x, unsigned char y, bool onOff) {
+    if(((video_memory[x] >> (y ^ 31)) & onOff) == onOff) return;
+    else if(((video_memory[x] >> (y ^ 31)) & onOff) != onOff && onOff == 0) video_memory[x] -= (1 << (y ^ 31));
+    else video_memory[x] += (1 << (y ^ 31));
+    return;
 }
 void draw_line(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
     int dx = x2 - x1;
