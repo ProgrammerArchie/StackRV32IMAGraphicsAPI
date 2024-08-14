@@ -8,7 +8,7 @@ unsigned video_memory[31];
 void write_to_column(unsigned char column_number, unsigned column_data) {
 	unsigned char* columnaddress = (unsigned char*) COLUMNBYTE;
 	if(column_number > 32) column_number = 32;
-	*columnaddress = column_number - 1;
+	*columnaddress = column_number;
 	unsigned char* screenbyte = (unsigned char*) UPPERSCREENBYTE;
 	*screenbyte = column_data >> 24;
 	screenbyte = (unsigned char*) UPPERMIDDLESCREENBYTE;
