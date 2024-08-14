@@ -30,7 +30,7 @@ void draw_pixel(unsigned char x, unsigned char y, bool onOff) {
     else video_memory[x] += (1 << (y ^ 31));
     return;
 }
-void draw_line(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2) {
+void draw_line(unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, bool onOff) {
     int dx = x2 - x1;
     int dy = y2 - y1;
     int j = y1;
@@ -40,7 +40,7 @@ void draw_line(unsigned char x1, unsigned char x2, unsigned char y1, unsigned ch
     int stepy = dy >= 0 ? 1 : -1;
     if (dx >= dy) {
         for (i; i <= x2 - 1; i += stepx) {
-            draw_pixel(i, j);
+            draw_pixel(i, j, onOff);
             if (e >= 0) {
                 j += stepy;
                 e -= dx;
@@ -50,7 +50,7 @@ void draw_line(unsigned char x1, unsigned char x2, unsigned char y1, unsigned ch
     }
     else {
         for (int j = y1; j <= y2 - 1; j += stepy) {
-            draw_pixel(i, j);
+            draw_pixel(i, j, onOff);
             if (e >= 0) {
                 i += stepx;
                 e -= dy;
@@ -60,9 +60,9 @@ void draw_line(unsigned char x1, unsigned char x2, unsigned char y1, unsigned ch
     }
     return;
 }
-void draw_triangle(unsigned char x1, unsigned char x2, unsigned char x3, unsigned char y1, unsigned char y2, unsigned char y3) {
-	draw_line(x1, y1, x2, y2);
-	draw_line(x2, y2, x3, y3);
-	draw_line(x1, y1, x3, y3);
+void draw_triangle(unsigned char x1, unsigned char x2, unsigned char x3, unsigned char y1, unsigned char y2, unsigned char y3, bool onOff) {
+	draw_line(x1, y1, x2, y2, onOff);
+	draw_line(x2, y2, x3, y3, onOff);
+	draw_line(x1, y1, x3, y3, onOff);
 	return;
 }
